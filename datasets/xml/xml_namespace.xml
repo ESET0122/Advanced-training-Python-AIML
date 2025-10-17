@@ -1,0 +1,8 @@
+<ns:data xmlns:ns="http://www.example.com">
+  <ns:country name="USA">
+    <ns:city name="New York">
+      <ns:person name="John" age="30"/>
+      <ns:person name="Anna" age="25"/>
+    </ns:city>
+  </ns:country>
+</ns:data>
