@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hotel Cancellation Prediction</title>
+</head>
+<body>
+  <h1>Hotel Cancellation Predictor</h1>
+  <form id="bookingForm">
+    Lead Time: <input type="number" name="lead_time" required><br>
+    Arrival Week Number: <input type="number" name="arrival_date_week_number" required><br>
+    Arrival Day of Month: <input type="number" name="arrival_date_day_of_month" required><br>
+    Weekend Nights: <input type="number" name="stays_in_weekend_nights" required><br>
+    Week Nights: <input type="number" name="stays_in_week_nights" required><br>
+    Adults: <input type="number" name="adults" required><br>
+    Children: <input type="number" name="children" required><br>
+    Babies: <input type="number" name="babies" required><br>
+    Is Repeated Guest (0 or 1): <input type="number" name="is_repeated_guest" min="0" max="1" required><br>
+    Previous Cancellations: <input type="number" name="previous_cancellations" required><br>
+    Previous Bookings Not Canceled: <input type="number" name="previous_bookings_not_canceled" required><br>
+    Required Car Parking Spaces: <input type="number" name="required_car_parking_spaces" required><br>
+    Total of Special Requests: <input type="number" name="total_of_special_requests" required><br>
+    ADR: <input type="number" name="adr" step="0.01" required><br>
+    Hotel: <input type="text" name="hotel" list="hotels" required>
+    <datalist id="hotels">
+        <option value="Resort Hotel">
+        <option value="City Hotel">
+    </datalist>
+    <br>
+    Arrival Month (1-12): <input type="number" name="arrival_date_month" min="1" max="12" required><br>
+    Meal: <input type="text" name="meal" list="meals" required>
+    <datalist id="meals">
+        <option value="BB">
+        <option value="FB">
+        <option value="HB">
+        <option value="SC">
+    </datalist>
+    <br>
+    Market Segment: <input type="text" name="market_segment" required><br>
+    Distribution Channel: <input type="text" name="distribution_channel" required><br>
+    Reserved Room Type: <input type="text" name="reserved_room_type" maxlength="1" required><br>
+    Deposit Type: <input type="text" name="deposit_type" required><br>
+    Customer Type: <input type="text" name="customer_type" required><br>
+    <button type="submit">Predict</button>
+  </form>
+  <div id="result"></div>
+  <script>
+    document.getElementById("bookingForm").onsubmit = async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = {};
+      for (const el of form.elements) {
+        if (el.name) data[el.name] = el.type === "number" ? Number(el.value) : el.value;
+      }
+      const resp = await fetch("/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+      const json = await resp.json();
+      document.getElementById("result").innerText =
+        "Cancellation probability: " + ((json.cancellation_probability || 0) * 100).toFixed(2) + "%";
+    }
+  </script>
+</body>
+</html>

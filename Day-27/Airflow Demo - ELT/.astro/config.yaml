@@ -1,0 +1,6 @@
+postgres:
+    port: "5432"
+project:
+    name: apache-demo
+webserver:
+    port: "8000"
